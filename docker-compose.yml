@@ -1,0 +1,24 @@
+version: '3.1'
+services:
+  taskapp:
+    container_name: task-demo
+    image: ziebermayr/task:latest
+    #build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - taskdb
+  taskdb:
+    container_name: taskdb
+    image: postgres:13
+    volumes:
+      - sample_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=sample
+      - POSTGRES_USER=sample
+      - POSTGRES_DB=sample
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+volumes:
+  sample_db: {}
