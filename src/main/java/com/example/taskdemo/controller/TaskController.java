@@ -7,6 +7,7 @@ import com.example.taskdemo.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,9 @@ public class TaskController {
 
     @PostMapping("/tasks")
     public ResponseEntity<TaskReturnDto> createTask(@RequestBody TaskCreationDto task) {
-        return ResponseEntity.ok(taskService.createTask(task));
+        TaskReturnDto createdTask = taskService.createTask(task);
+        String location = "api/tasks/"+createdTask.getId();
+        return ResponseEntity.created(URI.create(location)).body(createdTask);
     }
 
     @PutMapping("tasks")
@@ -42,7 +45,7 @@ public class TaskController {
     }
 
     @DeleteMapping("tasks/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable(value = "id") Long taskID) {
+    public ResponseEntity<Void> deleteTask(@PathVariable(value = "id") Long taskID) {
         taskService.deleteTask(taskID);
         return ResponseEntity.ok().build();
     }
